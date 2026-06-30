@@ -2,10 +2,72 @@ import {getListing} from "../api/listing"
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useUser } from "../api/User";
+import { getApplicationsByListing } from "../api/application";
+import ListingApplication from "../components/company-listing-details/ListingApplication";
+
+function ApplicationsTable({ count, applications }) {
+    return count > 0 ?
+                 <table>
+                        <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Message</th>
+                            <th>Last updated</th>
+                            <th>Status</th>
+                            <th>Set status</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                            {applications.map(app => 
+                                <ListingApplication
+                                    key={app.applicationId}
+                                    application={app}
+                                />)}
+                        </tbody>
+                    </table>
+                    : <><p>No applications found</p></>;
+}
+
+function RoleBasedView({ applications, role }) {
+    return  role === "company" ?
+    <>
+                        <div className="card-footer bg-white d-flex justify-content-between">
+                        <h2>Applications</h2>
+                            <ApplicationsTable
+                                count={applications.totalCount}
+                                applications={applications.list}
+                            />
+                        </div>
+                        </>
+                    : 
+                    <>
+                        <div className="card-footer bg-white d-flex justify-content-between">
+                            <Link 
+                                to="/listings"
+                                className="btn btn-outline-secondary"
+                            >
+                                Back
+                            </Link>
+
+                            <button className="btn btn-primary">
+                                Apply
+                            </button>
+                        </div>
+                    </>
+}
 
 export default function ListingDetails({id}){
 
     const [listing, setListing] = useState(0);
+    const [applications, setApplications] = useState({
+        list: [],
+        paging: {
+            pageSize: 0,
+            pageNumber: 0
+        },
+        totalCount: 0
+    })
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
@@ -15,6 +77,7 @@ export default function ListingDetails({id}){
                 setLoading(true);
                 const data = await getListing(id);
                 setListing(data);
+                setApplications(await getApplicationsByListing(10, 1, id));
                 setLoading(false);
             } catch (error) {
                 console.log(error.response?.status)
@@ -111,20 +174,10 @@ export default function ListingDetails({id}){
 
                         </div>
 
-                        <div className="card-footer bg-white d-flex justify-content-between">
-
-                            <Link 
-                                to="/listings"
-                                className="btn btn-outline-secondary"
-                            >
-                                Back
-                            </Link>
-
-                            <button className="btn btn-primary">
-                                Apply
-                            </button>
-
-                        </div>
+                        <RoleBasedView 
+                            applications={applications}
+                            role="company"
+                        />
 
                     </div>
                 </div>
