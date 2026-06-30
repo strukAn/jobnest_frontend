@@ -1,7 +1,9 @@
 import api from './axios'
 
-export const getListings = async (pageSize, pageNumber) => {
-   const response = await api.get(`/listings?pageSize=${pageSize}&pageNumber=${pageNumber}`);
+export const getListings = async (pageSize, pageNumber, query) => {
+   const response = await api.get(`/listings?pageSize=${pageSize}&pageNumber=${pageNumber}&searchQuery=${query.search}&cityId=${query.cityId}
+    &seniorityId=${query.seniorityId}&technologyId=${query.technologyId}&domainId=${query.domainId}
+    &sortBy=${query.sortBy}&sortOrder=${query.sortOrder}&isFavorite=${query.isFavorite}`);
    return response.data;
 };
 

@@ -19,7 +19,7 @@ export default function NavBar(){
                 type="search"
                 placeholder="Search companies..."
                 />
-                <button className="btn btn-outline-primary ms-2">
+                <button className="btn btn-outline-primary ms-2" type="button">
                 Search
                 </button>
             </form>
