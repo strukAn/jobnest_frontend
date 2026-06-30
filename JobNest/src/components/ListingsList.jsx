@@ -39,12 +39,12 @@ export default function ListingsList({ listings }) {
                             </p>
                             <p className="mb-1">
                                 <strong>Posted:</strong>{" "}
-                                {new Date(listing.createdAt).toLocaleDateString()}
+                                {new Date(listing.createdAt).toLocaleDateString(navigator.language)}
                             </p>
                         </div>
 
                         <div className="card-footer bg-white">
-                            <Link to="/">Details</Link>
+                            <Link to="/" >Details</Link>
                         </div>
                     </div>
                 </div>
