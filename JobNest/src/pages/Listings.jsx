@@ -37,6 +37,8 @@ export default function Listings(){
                 setLoading(true);
                 const data = await getListings(paging.pageSize, paging.pageNumber, query);
                 setListings(data.list);
+                paging.pageNumber = data.paging.pageNumber;
+                paging.pageSize = data.paging.pageSize;
                 setTotalCount(data.totalCount); 
                 setLoading(false);
             } catch (error) {
